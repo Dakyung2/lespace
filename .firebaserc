@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "empyrean-surge-395513"
+  },
+  "targets": {
+    "empyrean-surge-395513": {
+      "hosting": {
+        "webapp1": [
+          "lespace"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
