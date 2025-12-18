@@ -13,7 +13,6 @@ import '../buttons/comment_button.dart';
 
 //All reviews
 class BuildingReviewPost extends StatefulWidget {
-
   final String? message;
   final String location;
   final String timestamp;
@@ -25,9 +24,8 @@ class BuildingReviewPost extends StatefulWidget {
   final String? recommendation;
   final String? leakage;
 
- // final String? realEstateName;
+  // final String? realEstateName;
   //final String? agencyReveiw;
-
 
   //final double? gasFeePerUnit;
   //final double? electricFeePerUnit;
@@ -39,22 +37,20 @@ class BuildingReviewPost extends StatefulWidget {
   final String? messageHard;
   final String? messageGood;
 
-     const BuildingReviewPost({
+  const BuildingReviewPost({
     super.key,
-       //required this.realEstateName,
-       //required this.agencyReveiw,
+    //required this.realEstateName,
+    //required this.agencyReveiw,
 
-      required this.messageGood,
+    required this.messageGood,
     required this.message,
     required this.location,
     required this.messageHard,
-
-      required this.bugManagement,
-       required this.bugAppear,
-      required this.recommendation,
+    required this.bugManagement,
+    required this.bugAppear,
+    required this.recommendation,
     required this.leakage,
-      required this.sound,
-
+    required this.sound,
     required this.timestamp,
     required this.likes,
     required this.postId,
@@ -70,23 +66,25 @@ class _BuildingReviewPostState extends State<BuildingReviewPost> {
   final _commentTextController = TextEditingController();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     isLiked = widget.likes.contains(currentUser.email);
   }
-  void toggleLike(){
+
+  void toggleLike() {
     setState(() {
       isLiked = !isLiked;
     });
 
-    DocumentReference docRef = FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
+    DocumentReference docRef =
+        FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
 
-    if (isLiked){
+    if (isLiked) {
       //add the user's email to the "likes" filed
       docRef.update({
         'Likes': FieldValue.arrayUnion([currentUser.email])
       });
-    }else{
+    } else {
       docRef.update({
         'Likes': FieldValue.arrayRemove([currentUser.email])
       });
@@ -94,13 +92,13 @@ class _BuildingReviewPostState extends State<BuildingReviewPost> {
   }
 
   //add a comment
-  void addComment(String commentText){
+  void addComment(String commentText) {
     //write the comment to firestore under the comment collection
     FirebaseFirestore.instance
         .collection("User Posts")
         .doc(widget.postId)
         .collection("Comments")
-    //add new doc
+        //add new doc
         .add({
       "CommentText": commentText,
       "CommentedBy": currentUser.email,
@@ -109,42 +107,43 @@ class _BuildingReviewPostState extends State<BuildingReviewPost> {
   }
 
   //show a dialog box for adding comment
-  void showCommentDialog(){
+  void showCommentDialog() {
     showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const TextStyle1(text: "댓글",),
-          content: TextField(
-            controller: _commentTextController,
-            decoration: const InputDecoration(
-              hintText: "댓글을 입력하세요",
-           ),
-            maxLines: null,
-          ),
-          actions: [
-            //cancel button
-            TextButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                  //clear controller
-                  _commentTextController.clear();
-                } ,
-                child: const Text(
-                  "뒤로",
-                  style: TextStyle(fontSize: 16, color: Colors.black87),
-                )),
-            //save button
-            TextButton(
-                onPressed: () {
-                  addComment(_commentTextController.text);
-                  Navigator.pop(context);
-                  _commentTextController.clear();
-                  } ,
-                child: const Text(
-                  "전송", style:TextStyle(fontSize: 16, color: Colors.black)
-                )),
-          ],
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const TextStyle1(
+          text: "댓글",
         ),
+        content: TextField(
+          controller: _commentTextController,
+          decoration: const InputDecoration(
+            hintText: "댓글을 입력하세요",
+          ),
+          maxLines: null,
+        ),
+        actions: [
+          //cancel button
+          TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                //clear controller
+                _commentTextController.clear();
+              },
+              child: const Text(
+                "뒤로",
+                style: TextStyle(fontSize: 16, color: Colors.black87),
+              )),
+          //save button
+          TextButton(
+              onPressed: () {
+                addComment(_commentTextController.text);
+                Navigator.pop(context);
+                _commentTextController.clear();
+              },
+              child: const Text("전송",
+                  style: TextStyle(fontSize: 16, color: Colors.black))),
+        ],
+      ),
     );
   }
 
@@ -154,13 +153,14 @@ class _BuildingReviewPostState extends State<BuildingReviewPost> {
     return Column(
       children: [
         Container(
-          decoration: BoxDecoration(
-              color: const Color(0xecffffff),
-              borderRadius: BorderRadius.circular(8)),
-          margin: const EdgeInsets.only(top:14, left:14, right:14),
-          padding: const EdgeInsets.only(top: 14, left: 14, right: 14, bottom: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            decoration: BoxDecoration(
+                color: const Color(0xecffffff),
+                borderRadius: BorderRadius.circular(8)),
+            margin: const EdgeInsets.only(top: 14, left: 14, right: 14),
+            padding:
+                const EdgeInsets.only(top: 14, left: 14, right: 14, bottom: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Row(
@@ -171,227 +171,260 @@ class _BuildingReviewPostState extends State<BuildingReviewPost> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(widget.location,
-                        style: const TextStyle(
-                          fontSize: 26,
-                          color: Colors.grey,
-                        ),),
+                        Text(
+                          widget.location,
+                          style: const TextStyle(
+                            fontSize: 26,
+                            color: Colors.grey,
+                          ),
+                        ),
 
-                      /*  if(widget.realEstateName != null && widget.realEstateName!.isNotEmpty)
+                        /*  if(widget.realEstateName != null && widget.realEstateName!.isNotEmpty)
                           Text("${widget.realEstateName!.toString()} 중개",
                           style: const TextStyle(fontSize: 12,
                           color: Colors.grey),)
                           */
                       ],
                     ),
-                    const SizedBox(width: 5,),
+                    const SizedBox(
+                      width: 5,
+                    ),
                     Container(
                       constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width * 0.15, // Set to half of the screen width
+                        maxWidth: MediaQuery.of(context).size.width *
+                            0.15, // Set to half of the screen width
                       ),
                       padding: EdgeInsets.zero,
                       child: ElevatedButton(
-                          onPressed:() async {
+                          onPressed: () async {
                             final address = widget.location;
-                            if (address.isNotEmpty){
+                            if (address.isNotEmpty) {
                               Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context){
-                                      return ReviewCommunicationRoom(
-                                          address: address);}),);}},
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(const Color(0xff91bae7)),
-                          minimumSize: MaterialStateProperty.all(const Size(0, 0)),
-                          padding: MaterialStateProperty.all(const EdgeInsets.symmetric(horizontal: 1, vertical: 0.5))
+                                MaterialPageRoute(builder: (context) {
+                                  return ReviewCommunicationRoom(
+                                      address: address);
+                                }),
+                              );
+                            }
+                          },
+                          style: ButtonStyle(
+                              backgroundColor: WidgetStateProperty.all(
+                                  const Color(0xff91bae7)),
+                              minimumSize:
+                                  WidgetStateProperty.all(const Size(0, 0)),
+                              padding: WidgetStateProperty.all(
+                                  const EdgeInsets.symmetric(
+                                      horizontal: 1, vertical: 0.5))
 
-                          //MaterialStateProperty.all<Color>(Color(0xe0d9e0e7) ,),
-                    ),
+                              //MaterialStateProperty.all<Color>(Color(0xe0d9e0e7) ,),
+                              ),
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("Q&A", style: TextStyle(fontSize: 12,color: Colors.white70),),
-                              SizedBox(width: 2,),
-                              Icon(Icons.question_answer_outlined,size: 12, color: Colors.white70,),
+                              Text(
+                                "Q&A",
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.white70),
+                              ),
+                              SizedBox(
+                                width: 2,
+                              ),
+                              Icon(
+                                Icons.question_answer_outlined,
+                                size: 12,
+                                color: Colors.white70,
+                              ),
                             ],
-
-                          )
-                      ),
+                          )),
                     )
-
-
                   ],
                 ),
-                const SizedBox(height: 9,),
-               if(widget.messageHard != null)
-                 ReviewFieldCard(
-                    text: widget.messageHard!.toString(),),
-                if(widget.messageGood != null)
+                const SizedBox(
+                  height: 9,
+                ),
+                if (widget.messageHard != null)
+                  ReviewFieldCard(
+                    text: widget.messageHard!.toString(),
+                  ),
+                if (widget.messageGood != null)
                   ReviewFieldCard(text: widget.messageGood!.toString()),
-
-                if(widget.bugManagement != null)
-                  ReviewFieldCard(
-                      text: "벌레관리: ${widget.bugManagement!}"),
-
-                if(widget.bugAppear != null)
-                  ReviewFieldCard(
-                      text: "벌레 ${widget.bugAppear!}"),
-
+                if (widget.bugManagement != null)
+                  ReviewFieldCard(text: "벌레관리: ${widget.bugManagement!}"),
+                if (widget.bugAppear != null)
+                  ReviewFieldCard(text: "벌레 ${widget.bugAppear!}"),
                 const SizedBox(height: 3),
-                if(widget.sound != null && widget.sound!.isNotEmpty)
+                if (widget.sound != null && widget.sound!.isNotEmpty)
                   const Divider(
                       indent: 0.0,
                       endIndent: 0.0,
                       thickness: 1.5,
-                      color: Color(0xe0d9e0e7)
-                  ),
-                if(widget.sound != null && widget.sound!.isNotEmpty)
+                      color: Color(0xe0d9e0e7)),
+                if (widget.sound != null && widget.sound!.isNotEmpty)
                   Row(
                     children: [
-                      const Text("소음: ", style: TextStyle(fontSize: 18),),
+                      const Text(
+                        "소음: ",
+                        style: TextStyle(fontSize: 18),
+                      ),
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
-                          children: widget.sound!.map((sound) =>
-                           Row(
-                             children: [
-                               Text(sound.toString(), style: const TextStyle(fontSize: 16, color: Colors.black), ),
-                               const Text(", "),
-                             ],
-                           )).toList(),
+                          children: widget.sound!
+                              .map((sound) => Row(
+                                    children: [
+                                      Text(
+                                        sound.toString(),
+                                        style: const TextStyle(
+                                            fontSize: 16, color: Colors.black),
+                                      ),
+                                      const Text(", "),
+                                    ],
+                                  ))
+                              .toList(),
                         ),
                       ),
                     ],
                   ),
-                
-                if(widget.message != null)
+                if (widget.message != null)
                   ReviewFieldCard(text: widget.message!.toString()),
                 ExpansionTile(
                   tilePadding: EdgeInsets.zero,
-                  childrenPadding:EdgeInsets.zero,
+                  childrenPadding: EdgeInsets.zero,
                   iconColor: Colors.black87,
-                    title: const Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text("더보기", style: TextStyle(fontSize: 12, color: Colors.black54), ),
-                      ],
-                    ),
-                children: [
-                  Column(
+                  title: const Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      if(widget.leakage != null)
-                        ReviewFieldCard(
-                            text:"누수: ${widget.leakage!}"),
-                      if(widget.recommendation != null)
-                        ReviewFieldCard(text: widget.recommendation!.toString()),
-                  
+                      Text(
+                        "더보기",
+                        style: TextStyle(fontSize: 12, color: Colors.black54),
+                      ),
                     ],
-                  )
-                ],),
-
-                  ],
-          )),
-        Container(
-          decoration:
-          BoxDecoration(
-                      color: const Color(0xedd9e0e7),
-                      borderRadius: BorderRadius.circular(8)),
-          margin: const EdgeInsets.only( left:14, right:14),
-          padding: const EdgeInsets.only(top: 14, left: 14, right: 14,),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-
-              //Like
-              Column(
-                children:
-                [LikeButton(
-                  onTap: toggleLike,
-                  isLiked: isLiked,
                   ),
-                  const SizedBox(height: 1,),
-                  Text(widget.likes.length.toString(),
-                    style: const TextStyle(color: Colors.grey,
-                        fontSize: 10),),
-                ],
-              ),
-              const SizedBox(width: 8,),
-              //Comment
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CommentButton(
-                        onTap: showCommentDialog),
-                    StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance
-                            .collection("User Posts")
-                            .doc(widget.postId)
-                            .collection("Comments")
-                            .orderBy("CommentTime", descending: true)
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          //show loading circle
-                          if (snapshot.hasData && snapshot.data!.docs.isNotEmpty ){
-                            return ListTileTheme(
-                              contentPadding: EdgeInsets.zero,
-                              dense: true,
-                              horizontalTitleGap: 5,
-                              
-                      
-                              minLeadingWidth: 0,
-                              child: ExpansionTile(
-                              tilePadding:EdgeInsets.zero,
-                               expandedCrossAxisAlignment:CrossAxisAlignment.start ,
-                                expandedAlignment: Alignment.topLeft,
-                                title: const Text("댓글 보기",
-                                  style: TextStyle(fontSize: 12, color: Colors.black54),
-                                ),
-                                controlAffinity: ListTileControlAffinity.leading,
-                                children: [
-                                  ListView(
-                                    shrinkWrap: true,
-                                    //physics: const NeverScrollableScrollPhysics(),
-                                    children:
-                                    snapshot.data!.docs.map((doc) {
-                                      //get comment from firebase
-                                      final commentData = doc.data() as Map<String, dynamic>;
-                                      //return
-                                      return CommentCard(
-                                        text: commentData["CommentText"],
-                                        //user: commentData["CommentedBy"],
-                                        time: formatData(commentData["CommentTime"]),
-                                      );
-                                    }).toList(),
-                                  )
-                                ],
-                              ),
-                            );
-                          }else{
-                            return Container();
-                          }
-                        }
-                    ),
-
+                    Column(
+                      children: [
+                        if (widget.leakage != null)
+                          ReviewFieldCard(text: "누수: ${widget.leakage!}"),
+                        if (widget.recommendation != null)
+                          ReviewFieldCard(
+                              text: widget.recommendation!.toString()),
+                      ],
+                    )
                   ],
                 ),
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+              ],
+            )),
+        Container(
+            decoration: BoxDecoration(
+                color: const Color(0xedd9e0e7),
+                borderRadius: BorderRadius.circular(8)),
+            margin: const EdgeInsets.only(left: 14, right: 14),
+            padding: const EdgeInsets.only(
+              top: 14,
+              left: 14,
+              right: 14,
+            ),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.timestamp,
-                    style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey),),
-                ],
-              ),
-              ]
-              )
-              ),
-              //Comments under post
-            ],
+                  //Like
+                  Column(
+                    children: [
+                      LikeButton(
+                        onTap: toggleLike,
+                        isLiked: isLiked,
+                      ),
+                      const SizedBox(
+                        height: 1,
+                      ),
+                      Text(
+                        widget.likes.length.toString(),
+                        style:
+                            const TextStyle(color: Colors.grey, fontSize: 10),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  //Comment
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CommentButton(onTap: showCommentDialog),
+                        StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection("User Posts")
+                                .doc(widget.postId)
+                                .collection("Comments")
+                                .orderBy("CommentTime", descending: true)
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              //show loading circle
+                              if (snapshot.hasData &&
+                                  snapshot.data!.docs.isNotEmpty) {
+                                return ListTileTheme(
+                                  contentPadding: EdgeInsets.zero,
+                                  dense: true,
+                                  horizontalTitleGap: 5,
+                                  minLeadingWidth: 0,
+                                  child: ExpansionTile(
+                                    tilePadding: EdgeInsets.zero,
+                                    expandedCrossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    expandedAlignment: Alignment.topLeft,
+                                    title: const Text(
+                                      "댓글 보기",
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.black54),
+                                    ),
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    children: [
+                                      ListView(
+                                        shrinkWrap: true,
+                                        //physics: const NeverScrollableScrollPhysics(),
+                                        children:
+                                            snapshot.data!.docs.map((doc) {
+                                          //get comment from firebase
+                                          final commentData = doc.data()
+                                              as Map<String, dynamic>;
+                                          //return
+                                          return CommentCard(
+                                            text: commentData["CommentText"],
+                                            //user: commentData["CommentedBy"],
+                                            time: formatData(
+                                                commentData["CommentTime"]),
+                                          );
+                                        }).toList(),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                return Container();
+                              }
+                            }),
+                      ],
+                    ),
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        widget.timestamp,
+                        style:
+                            const TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ])),
+        //Comments under post
+      ],
     );
   }
 }
