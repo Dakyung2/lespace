@@ -61,12 +61,13 @@ class _RegisterPageState extends State<RegisterPage> {
         .get();
     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
 
-    String context = data["Context"];
+    String context = data["Context"] ?? "내용을 불러올 수 없습니다. 나중에 다시 시도해주세요.";
     setState(() {
       usagePolicyContext = context;
     });
   }
 
+//fetch privacy policy from firestore
   Future<void> fetchPrivacyPolicy() async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection("Legal")
@@ -74,12 +75,14 @@ class _RegisterPageState extends State<RegisterPage> {
         .get();
 
     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-    String context = data["Context"];
+    String context = data["Context"] ?? "내용을 불러올 수 없습니다.";
+
     setState(() {
       privacyPolicyContext = context;
     });
   }
 
+//fetch age restriction from firestore
   Future<void> fetchPrivacyPolicyConsent() async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection("Legal")
@@ -87,7 +90,7 @@ class _RegisterPageState extends State<RegisterPage> {
         .get();
 
     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-    String context = data["Context"];
+    String context = data["Context"] ?? "내용을 불러올 수 없습니다. 다음에 다시 시도해주세요.";
     setState(() {
       privacyPolicyConsentContext = context;
     });
